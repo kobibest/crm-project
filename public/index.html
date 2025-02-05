@@ -17,12 +17,20 @@
         <div id="actions-list"></div>
     </div>
     <script>
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbxHpKBBUUyOgMy_qySjkkhBjXcta3kQ11hwbsiDAKPSG2ReLIe9I-pKAD3wdaSXiA447g/exec';
+        // החלף את YOUR_GOOGLE_APPS_SCRIPT_URL בכתובת ה-URL של ה-API שיצרת
+        const apiUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
         async function fetchActions() {
-            const response = await fetch(apiUrl);
-            const actions = await response.json();
-            displayActions(actions);
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const actions = await response.json();
+                displayActions(actions);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
         }
 
         function displayActions(actions) {
@@ -54,12 +62,19 @@
 
         async function filterActions() {
             const actionType = document.getElementById('action-type-filter').value;
-            const response = await fetch(apiUrl);
-            let actions = await response.json();
-            if (actionType) {
-                actions = actions.filter(action => action.action_type === actionType);
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                let actions = await response.json();
+                if (actionType) {
+                    actions = actions.filter(action => action.action_type === actionType);
+                }
+                displayActions(actions);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
             }
-            displayActions(actions);
         }
 
         fetchActions();
