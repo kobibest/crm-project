@@ -1,21 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Actions</title>
+    <title>פעולות לקוח</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Client Actions</h1>
+        <h1>פעולות לקוח</h1>
         <div class="filter">
-            <label for="action-type-filter">Filter by action type:</label>
+            <label for="action-type-filter">סנן לפי סוג פעולה:</label>
             <input type="text" id="action-type-filter">
-            <button onclick="filterActions()">Filter</button>
+            <button onclick="filterActions()">סנן</button>
         </div>
         <div id="actions-list"></div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        // החלף את YOUR_GOOGLE_APPS_SCRIPT_URL בכתובת ה-URL של ה-API שיצרת
+        const apiUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+        async function fetchActions() {
+            const response = await fetch(apiUrl);
+            const actions = await response.json();
+            displayActions(actions);
+        }
+
+        function displayActions(actions) {
+            const actionsList = document.getElementById('actions-list');
+            actionsList.innerHTML = '';
+            actions.forEach(action => {
+                const actionBlock = document.createElement('div');
+                actionBlock.className = 'action-block';
+                
+                const actionHeader = document.createElement('div');
+                actionHeader.className = 'action-header';
+                actionHeader.innerHTML = `<div>${action.title}</div><div class="action-type">${action.action_type}</div>`;
+                
+                const actionDescription = document.createElement('div');
+                actionDescription.className = 'action-description';
+                actionDescription.textContent = action.description;
+                
+                const actionFooter = document.createElement('div');
+                actionFooter.className = 'action-footer';
+                actionFooter.innerHTML = `<div>${new Date(action.action_date).toLocaleString()}</div><div>${action.performed_by}</div>`;
+                
+                actionBlock.appendChild(actionHeader);
+                actionBlock.appendChild(actionDescription);
+                actionBlock.appendChild(actionFooter);
+                
+                actionsList.appendChild(actionBlock);
+            });
+        }
+
+        async function filterActions() {
+            const actionType = document.getElementById('action-type-filter').value;
+            const response = await fetch(apiUrl);
+            let actions = await response.json();
+            if (actionType) {
+                actions = actions.filter(action => action.action_type === actionType);
+            }
+            displayActions(actions);
+        }
+
+        fetchActions();
+    </script>
 </body>
 </html>
