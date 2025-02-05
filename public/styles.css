@@ -1,11 +1,14 @@
 body {
     font-family: Arial, sans-serif;
+    direction: rtl; /* כיווניות מימין לשמאל */
 }
+
 .container {
     width: 80%;
     margin: auto;
     padding: 20px;
 }
+
 .action-block {
     border: 1px solid #ccc;
     padding: 10px;
@@ -13,21 +16,26 @@ body {
     border-radius: 5px;
     background-color: #f9f9f9;
 }
+
 .action-header {
     display: flex;
     justify-content: space-between;
 }
+
 .action-type {
     color: #666;
 }
+
 .action-description {
     margin: 10px 0;
 }
+
 .action-footer {
     display: flex;
     justify-content: space-between;
     color: #888;
 }
+
 .filter {
     margin: 20px 0;
 }
